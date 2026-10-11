@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react"
 import ConceptVisual, { hasConceptVisual } from "./ConceptVisual"
+import ConceptMedia from "./ConceptMedia"
 import { getJourney, type JourneyId, type Question } from "./journeys"
 import type { PipReactionKind } from "./pipBehavior"
 
@@ -138,7 +139,12 @@ export default function JourneyPlayer({
               </span>
               <h2>{question.title}</h2>
               <p>{question.scene}</p>
-              {hasVisual && <ConceptVisual questionId={question.id} />}
+              {hasVisual && (
+                <>
+                  <ConceptVisual questionId={question.id} />
+                  <ConceptMedia questionId={question.id} />
+                </>
+              )}
               <div className="journey-formula">
                 <small>FIELD NOTE</small>
                 <strong>{question.formula}</strong>

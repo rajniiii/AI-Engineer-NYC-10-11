@@ -2,6 +2,7 @@ import type { Plugin } from "vite";
 import type { IncomingMessage, ServerResponse } from "node:http";
 import { runScan } from "./scanHandler";
 import { recordAnswer, fetchHistory } from "./db";
+import { fetchConceptMedia } from "./conceptMedia";
 
 function readBody(req: IncomingMessage): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -18,7 +19,7 @@ function sendJson(res: ServerResponse, status: number, body: unknown) {
   res.end(JSON.stringify(body));
 }
 
-/** Mounts /api/scan, /api/answer, /api/history on the Vite dev server so the
+/** Mounts /api/scan, /api/answer, /api/history, /api/concept-media on the Vite dev server so the
  * frontend can call them with no separate backend process — mirrors the
  * api/*.ts Vercel functions used in production. */
 export function apiScanMiddleware(): Plugin {
@@ -54,6 +55,17 @@ export function apiScanMiddleware(): Plugin {
         if (req.method !== "GET") return next();
         try {
           sendJson(res, 200, await fetchHistory(30));
+        } catch (e: any) {
+          sendJson(res, 500, { error: String(e?.message ?? e) });
+        }
+      });
+
+      server.middlewares.use("/api/concept-media", async (req: IncomingMessage, res: ServerResponse, next) => {
+        if (req.method !== "GET") return next();
+        try {
+          const query = new URL(req.url || "", "http://x").searchParams.get("query") || "";
+          if (!query) return sendJson(res, 400, { error: "Missing query" });
+          sendJson(res, 200, { items: await fetchConceptMedia(query) });
         } catch (e: any) {
           sendJson(res, 500, { error: String(e?.message ?? e) });
         }
