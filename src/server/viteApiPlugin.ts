@@ -3,6 +3,7 @@ import type { IncomingMessage, ServerResponse } from "node:http";
 import { runScan } from "./scanHandler";
 import { recordAnswer, fetchHistory } from "./db";
 import { fetchConceptMedia } from "./conceptMedia";
+import { curateConceptVideo } from "./conceptVideo";
 
 function readBody(req: IncomingMessage): Promise<string> {
   return new Promise((resolve, reject) => {
@@ -66,6 +67,19 @@ export function apiScanMiddleware(): Plugin {
           const query = new URL(req.url || "", "http://x").searchParams.get("query") || "";
           if (!query) return sendJson(res, 400, { error: "Missing query" });
           sendJson(res, 200, { items: await fetchConceptMedia(query) });
+        } catch (e: any) {
+          sendJson(res, 500, { error: String(e?.message ?? e) });
+        }
+      });
+
+      server.middlewares.use("/api/concept-video", async (req: IncomingMessage, res: ServerResponse, next) => {
+        if (req.method !== "GET") return next();
+        try {
+          const params = new URL(req.url || "", "http://x").searchParams;
+          const subject = params.get("subject") || "";
+          const id = params.get("id") || "";
+          if (!subject || !id) return sendJson(res, 400, { error: "Missing subject or id" });
+          sendJson(res, 200, await curateConceptVideo(subject, id));
         } catch (e: any) {
           sendJson(res, 500, { error: String(e?.message ?? e) });
         }

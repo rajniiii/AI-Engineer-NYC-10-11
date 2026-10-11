@@ -125,6 +125,15 @@
 @media (max-width: 480px) {
   .cm-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
 }
+.concept-ai-video { margin-top: var(--pip-sm); }
+.cv-btn-ai { border-color: var(--journey-accent); color: var(--journey-accent); }
+.cai-result { display: grid; gap: var(--pip-sm); }
+.cai-explanation { margin: 0; font-size: var(--pip-body); line-height: var(--pip-leading); color: var(--ink); background: var(--space-2); border-left: 3px solid var(--journey-accent); padding: var(--pip-sm) var(--pip-md); border-radius: 0 8px 8px 0; }
+.cai-player { position: relative; width: 100%; aspect-ratio: 16/9; border-radius: 8px; overflow: hidden; border: 1px solid var(--line); }
+.cai-player iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+.cai-more { display: flex; flex-direction: column; gap: 4px; font-size: var(--pip-small); }
+.cai-more a { color: var(--muted); text-decoration: underline; text-underline-offset: 2px; }
+.cai-more a:hover { color: var(--journey-accent); }
 .journey-answers { display: grid; gap: var(--pip-sm); margin: var(--pip-lg) 0; }
 .journey-answers button { display: flex; align-items: center; gap: var(--pip-md); padding: var(--pip-md); color: var(--ink); font-size: var(--pip-body); text-align: left; background: var(--space-2); border: 2px solid var(--line); border-radius: var(--pip-radius); line-height: 1.5; }
 .journey-answers button > span { display: grid; place-items: center; width: 28px; height: 28px; flex-shrink: 0; background: var(--panel); font-size: var(--pip-small); border-radius: 4px; }
