@@ -134,8 +134,20 @@ const games = [
     progress: "42% complete",
   },
   {
-    id: "scan",
+    id: "reactor",
     number: "03",
+    kind: "calculus",
+    tag: "RATES & CHANGE",
+    title: "REACTOR RUN",
+    subtitle: "CALCULUS",
+    description: "Read changing signals and stored energy using derivatives and integrals.",
+    sponsor: "Powered by Gemini API",
+    sponsorDetail: "AI scenario generation",
+    progress: "New case",
+  },
+  {
+    id: "scan",
+    number: "04",
     kind: "scan",
     tag: "SCAN-TO-LEARN",
     title: "SCAN & LEARN",
@@ -147,7 +159,7 @@ const games = [
   },
   {
     id: "bingo",
-    number: "04",
+    number: "05",
     kind: "bingo",
     tag: "ALGEBRA ARCADE",
     title: "TINY MATH BINGO",
@@ -158,6 +170,8 @@ const games = [
     progress: "New · 4×4 grid",
   },
 ];
+
+const JOURNEY_FOR_GAME: Record<string, JourneyId> = { case: "biopharma", mars: "physics", reactor: "calculus" };
 
 function GameArt({ kind }: { kind: string }) {
   if (kind === "case") {
@@ -271,7 +285,7 @@ function Dashboard({ openCase, openAnalytics, openJoin, openJourney, openScan }:
         </div>
       </section>
       <section className="games-grid">
-        {games.map((game) => <GameCard key={game.id} game={game} onStart={game.id === "bingo" ? () => window.location.assign("/bingo/index.html") : game.id === "scan" ? openScan : () => openJourney(game.id === "case" ? "biopharma" : "physics")} />)}
+        {games.map((game) => <GameCard key={game.id} game={game} onStart={game.id === "bingo" ? () => window.location.assign("/bingo/index.html") : game.id === "scan" ? openScan : () => openJourney(JOURNEY_FOR_GAME[game.id])} />)}
       </section>
       <section className="lower-grid">
         <article className="panel feed-panel">
